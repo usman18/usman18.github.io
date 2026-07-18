@@ -142,10 +142,10 @@
       <a href="mailto:uk32971@gmail.com" class="btn btn-ghost">Start a project</a>
     </div>
     <div class="stats">
-      <div class="stat reveal"><div class="n">447★</div><div class="l">GitHub stars, Flutter-UI-Kit</div></div>
+      <div class="stat reveal"><div class="n" data-stat="stars-suffixed">447★</div><div class="l">GitHub stars, Flutter-UI-Kit</div></div>
       <div class="stat reveal"><div class="n">16+</div><div class="l">UIs built from scratch</div></div>
       <div class="stat reveal"><div class="n">iOS + Android</div><div class="l">One Flutter codebase</div></div>
-      <div class="stat reveal"><div class="n">85</div><div class="l">Forks by other devs</div></div>
+      <div class="stat reveal"><div class="n" data-stat="forks">85</div><div class="l">Forks by other devs</div></div>
     </div>
   </div>
 </section>
@@ -161,8 +161,8 @@
       <a href="https://github.com/usman18/Flutter-UI-Kit" target="_blank" rel="noopener" class="btn btn-primary">View on GitHub →</a>
     </div>
     <div class="oss-stats">
-      <div><div class="n">447</div><div class="l">STARS</div></div>
-      <div><div class="n">85</div><div class="l">FORKS</div></div>
+      <div><div class="n" data-stat="stars">447</div><div class="l">STARS</div></div>
+      <div><div class="n" data-stat="forks">85</div><div class="l">FORKS</div></div>
     </div>
   </div>
 </div>
@@ -267,6 +267,15 @@
 <script>
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  fetch('https://api.github.com/repos/usman18/Flutter-UI-Kit')
+    .then(r=>r.ok?r.json():Promise.reject(r.status))
+    .then(repo=>{
+      document.querySelectorAll('[data-stat="stars"]').forEach(el=>el.textContent=repo.stargazers_count);
+      document.querySelectorAll('[data-stat="stars-suffixed"]').forEach(el=>el.textContent=repo.stargazers_count+'★');
+      document.querySelectorAll('[data-stat="forks"]').forEach(el=>el.textContent=repo.forks_count);
+    })
+    .catch(()=>{}); // keep hardcoded fallback values on failure
 </script>
 </body>
 </html>
